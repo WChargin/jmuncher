@@ -18,9 +18,15 @@ public class MuncherBoard extends GContainer {
 	private MunchMatcher matcher;
 
 	/**
+	 * The match listener used for this board.
+	 */
+	private MatchListener listener;
+
+	/**
 	 * Creates the board.
 	 */
-	public MuncherBoard() {
+	public MuncherBoard(MatchListener listener) {
+		this.listener = listener;
 		initializeTiles();
 		setSize(362, 362);
 		addAtCenter(new Muncher(Color.BLUE.darker(), 40));
