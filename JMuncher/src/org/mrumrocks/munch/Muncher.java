@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RadialGradientPaint;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -12,8 +13,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import jgame.Context;
+import jgame.GObject;
 import jgame.GSprite;
 import jgame.controller.MouseRotationController;
+import jgame.listener.GlobalKeyListener;
 
 /**
  * The main character of the muncher game.
@@ -33,6 +37,28 @@ public class Muncher extends GSprite {
 		super(createMuncherImages(color, size, size));
 		setSize(size, size);
 		addController(new MouseRotationController());
+
+		addListener(new GlobalKeyListener(KeyEvent.VK_SPACE) {
+			@Override
+			public void invoke(GObject target, Context context) {
+				List<MunchBlock> blocksHit = context
+						.hitTestClass(MunchBlock.class);
+				for (MunchBlock block : blocksHit) {
+					doMunch(block);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Munches the specified block.
+	 * 
+	 * @param block
+	 *            the block to munch
+	 */
+	private void doMunch(MunchBlock block) {
+		MuncherBoard board = getFirstAncestorOf(MuncherBoard.class);
+		board.attemptMunch(block);
 	}
 
 	/**

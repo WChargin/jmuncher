@@ -2,7 +2,11 @@ package org.mrumrocks.munch;
 
 import java.awt.Color;
 
+import jgame.Context;
 import jgame.GContainer;
+import jgame.GObject;
+import jgame.controller.AlphaTween;
+import jgame.listener.DelayListener;
 
 /**
  * Creates the game board for the muncher.
@@ -30,6 +34,32 @@ public class MuncherBoard extends GContainer {
 		initializeTiles();
 		setSize(362, 362);
 		addAtCenter(new Muncher(Color.BLUE.darker(), 40));
+	}
+
+	/**
+	 * Attempts to munch the given block.
+	 * 
+	 * @param block
+	 *            the block to munch
+	 */
+	public void attemptMunch(MunchBlock block) {
+		if (block.getAlpha() < 1) {
+			// This block has already been munched
+			// Prevent duplicates
+			return;
+		}
+		if (matcher.matches(block.getValue())) {
+			listener.correct();
+			block.addController(new AlphaTween(15, 1, 0));
+			block.addListener(new DelayListener(15) {
+				@Override
+				public void invoke(GObject target, Context context) {
+					target.removeSelf();
+				}
+			});
+		} else {
+			listener.incorrect();
+		}
 	}
 
 	/**
