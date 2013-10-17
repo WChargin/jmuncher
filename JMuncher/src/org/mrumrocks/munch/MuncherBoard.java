@@ -13,12 +13,26 @@ import jgame.GContainer;
 public class MuncherBoard extends GContainer {
 
 	/**
+	 * The matcher used for this board.
+	 */
+	private MunchMatcher matcher;
+
+	/**
 	 * Creates the board.
 	 */
 	public MuncherBoard() {
 		initializeTiles();
 		setSize(362, 362);
 		addAtCenter(new Muncher(Color.BLUE.darker(), 40));
+	}
+
+	/**
+	 * Gets the matcher used for this board.
+	 * 
+	 * @return the matcher
+	 */
+	public MunchMatcher getMatcher() {
+		return matcher;
 	}
 
 	/**
@@ -35,6 +49,16 @@ public class MuncherBoard extends GContainer {
 						block.getHeight() * ((1 + 2 * pad) * j + 0.5 + pad));
 			}
 		}
+	}
+
+	/**
+	 * Sets the matcher used for this board.
+	 * 
+	 * @param matcher
+	 *            the new matcher
+	 */
+	public void setMatcher(MunchMatcher matcher) {
+		this.matcher = matcher;
 	}
 
 }
